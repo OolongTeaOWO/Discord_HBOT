@@ -12,8 +12,8 @@ class EmbedModifier(commands.Cog):
             return  # 如果訊息是由機器人發送的，則不執行任何操作
         
         # 刪除前一個機器人的訊息
-        async for old_message in message.channel.history(limit=1):
-            if old_message.author == self.bot.user:
+        async for old_message in message.channel.history(limit=10):  # 檢查前10條訊息
+            if old_message.author == self.bot.user and old_message.embeds:
                 await old_message.delete()
                 break
         
