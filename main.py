@@ -4,7 +4,6 @@ import os
 from dotenv import load_dotenv
 from mod.view import Index
 
-from mod.dms.dm_mongo import mongo_dm
 from typing import Optional
 
 load_dotenv()
