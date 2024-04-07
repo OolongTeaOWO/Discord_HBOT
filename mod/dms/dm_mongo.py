@@ -4,25 +4,20 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client["database"]
 member_db = db.members
 
-class mongo_dm():
-    def __init__(self, memberID, addID,return_type:int):
-        self.addID = addID
-        self.memberID = memberID
-        self.type = return_type
-
-    def add_member(self):
-        if self.memberID == self.addID:
-            return "Id duplication"
-        existing_doc = member_db.find_one({self.memberID: {"$exists": True}})
-        
-        if existing_doc:
-            member_db.update_one({self.memberID: {"$exists": True}}, {"$addToSet": {self.memberID: self.addID}})
-        else:
-            member_db.insert_one({self.memberID: [self.addID]})
-        return {
-            1: member_db.find_one({self.memberID: {"$exists": True}}),
-            2: "done"
-        }.get(self.type, "unknown type")
+def add_member(memberID, addID, return_type: int):
+    if memberID == int(addID):
+        raise "ID 重複"
+    memberID = str(memberID)
+    existing_doc = member_db.find_one({memberID: {"$exists": True}})
     
-    def fetch_member(self):
-        pass
+    if existing_doc:
+        member_db.update_one({memberID: {"$exists": True}}, {"$addToSet": {memberID: addID}})
+    else:
+        member_db.insert_one({memberID: [addID]})
+    return {
+        1: member_db.find_one({memberID: {"$exists": True}}),
+        2: "完成"
+    }.get(return_type, "未知類型")
+
+def fetch_member(memberID):
+    return member_db.find_one({memberID: {"$exists": True}})

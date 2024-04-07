@@ -8,8 +8,6 @@ from discord.ui import Button, View
 
 from mod.view import Index
 
-from mod.dms.dm_mongo import mongo_dm
-
 class EmbedModifier(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -35,11 +33,11 @@ class EmbedModifier(commands.Cog):
         new_embed.set_author(name=ctx.user.display_name,icon_url=ctx.user.display_avatar)
         await ctx.response.send_message(embed=new_embed, view=Index())
         
-    @app_commands.command(name = "test", description = "test")
-    @app_commands.describe(a = "id", b = "id",t ="type")
-    async def test(self,ctx,a: str, b: str,t:int):
-        val = mongo_dm(a,b,t).add_member()
-        await ctx.response.send_message(val)
+    # @app_commands.command(name = "test", description = "test")
+    # @app_commands.describe(a = "id", b = "id",t ="type")
+    # async def test(self,ctx,a: str, b: str,t:int):
+    #     val = mongo_dm(a,b,t).add_member()
+    #     await ctx.response.send_message(val)
 
 async def setup(bot):
     await bot.add_cog(EmbedModifier(bot))
