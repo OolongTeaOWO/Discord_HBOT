@@ -4,7 +4,7 @@ from discord.ui import Button, View
 
 class EmbedModifier(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
+        self.bot = bot 
 
     @commands.Cog.listener()
     async def on_message(self, message):
