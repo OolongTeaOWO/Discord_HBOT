@@ -3,6 +3,8 @@ from pymongo import MongoClient
 client = MongoClient("mongodb://localhost:27017/")
 db = client["database"]
 member_db = db.members
+files_db = db.files
+
 
 def add_member(memberID, addID, return_type: int):
     if memberID == int(addID):
@@ -21,3 +23,6 @@ def add_member(memberID, addID, return_type: int):
 
 def fetch_member(memberID):
     return member_db.find_one({memberID: {"$exists": True}})
+
+def add_files(memberID):
+    pass
