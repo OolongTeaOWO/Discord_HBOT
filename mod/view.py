@@ -24,3 +24,5 @@ class Index(discord.ui.View):
     @discord.ui.button(label='反應回饋',style=discord.ButtonStyle.danger,emoji='❗',custom_id="3")
     async def reaction(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_message('this is fetch_data', ephemeral=True)
+
+#喔耶
