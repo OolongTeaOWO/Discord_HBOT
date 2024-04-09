@@ -12,7 +12,7 @@ bot = commands.Bot(command_prefix=commands.when_mentioned, intents=discord.Inten
 
 @bot.event
 async def on_ready():
-    game = discord.Game("with the API")
+    game = discord.Game("花椰菜")
     await bot.change_presence(status=discord.Status.idle, activity=game)
     await load_all_extensions()
     print(f">>{bot.user}上線<<")
@@ -28,5 +28,9 @@ async def load_all_extensions():
     slash = await bot.tree.sync()
     print(f"載入 {len(slash)} 個斜線指令")
 
+@bot.command(name='stop_bot', help='停止機器人運行')
+async def stop_bot(ctx):
+    await bot.close()
+    
 if __name__ == "__main__":
     bot.run(Token)
