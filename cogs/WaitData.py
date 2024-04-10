@@ -4,8 +4,9 @@ from discord import app_commands
 
 from discord.ext import commands
 
-from mod.img_view import Preview
+from mod.view import Preview
 from mod.img_table import Generate_Table
+from mod.dms.dm_mongo import add_file
 
 import io
 
@@ -18,7 +19,10 @@ class WaitData(commands.Cog):
         if file.filename[-3:] == 'csv':
             csv_data = await file.read()
             csv_string = csv_data.decode('utf-8')
-            data = Generate_Table(csv_string)
+            
+            base64_img = Generate_Table(csv_string)
+            add_file(str(interaction.user.id),base64_img)
+            await interaction.response.send_message("ok")
         else:
             await interaction.response.send_message("格式錯誤", ephemeral=True)
 
