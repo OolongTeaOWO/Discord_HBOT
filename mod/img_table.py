@@ -2,7 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.font_manager import fontManager
-from io import StringIO
+
+from io import StringIO,BytesIO
+import base64
 
 def Generate_Table(data_str):
     fontManager.addfont('TaipeiSansTCBeta-Regular.ttf')
@@ -43,3 +45,12 @@ def Generate_Table(data_str):
     plt.title("平均速度")
 
     plt.tight_layout() # 自動調整子圖間的間距
+
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+
+    # 關閉圖形
+    plt.close()
+    return image_base64
