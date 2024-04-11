@@ -56,3 +56,4 @@ def Generate_Table(data_str):
     plt.close()
     # return image_base64
     return png
+
