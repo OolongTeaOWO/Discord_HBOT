@@ -10,12 +10,15 @@ class Index(discord.ui.View):
 
     @discord.ui.button(label="資料共享",style=discord.ButtonStyle.green)
     async def call_preview(self,interaction:discord.Interaction,button:discord.ui.Button):
-        await interaction.response.edit_message(view=Preview())
+        embed = interaction.message.embeds[0]
+        embed.set_footer(text="資料共享")
+        await interaction.response.edit_message(view=Preview(),embed=embed)
     
     @discord.ui.button(label="個人健康資料",style=discord.ButtonStyle.green)
     async def call_share(self,interaction:discord.Interaction,button:discord.ui.Button):
-        embed = interaction.message.embeds
-        await interaction.response.edit_message(view=Profile())
+        embed = interaction.message.embeds[0]
+        embed.set_footer(text="個人健康資料")
+        await interaction.response.edit_message(view=Profile(),embed=embed)
             
     @discord.ui.button(label='反應回饋',style=discord.ButtonStyle.danger,emoji='❗',custom_id="error_reaction")
     async def error_reaction(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -42,7 +45,9 @@ class Profile(discord.ui.View):
         
     @discord.ui.button(label="回上一頁",style=discord.ButtonStyle.green)
     async def back(self,interaction:discord.Interaction,button:discord.ui.Button):
-        await interaction.response.edit_message(view=Index())
+        embed = interaction.message.embeds[0]
+        embed.remove_footer()
+        await interaction.response.edit_message(view=Index(),embed=embed)
 
 #喔耶
 class Preview(discord.ui.View):
@@ -55,4 +60,6 @@ class Preview(discord.ui.View):
     
     @discord.ui.button(label="回上一頁",style=discord.ButtonStyle.green)
     async def back(self,interaction:discord.Interaction,button:discord.ui.Button):
-        await interaction.response.edit_message(view=Index())
+        embed = interaction.message.embeds[0]
+        embed.remove_footer()
+        await interaction.response.edit_message(view=Index(),embed=embed)
