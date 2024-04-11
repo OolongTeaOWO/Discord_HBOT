@@ -7,7 +7,7 @@ from io import StringIO,BytesIO
 import base64
 
 def Generate_Table(data_str):
-    fontManager.addfont('Discord_HBOT/TaipeiSansTCBeta-Regular.ttf')
+    fontManager.addfont('TaipeiSansTCBeta-Regular.ttf')
     mpl.rc('font', family='Taipei Sans TC Beta')
     
     # 使用StringIO将字符串转换为文件对象
@@ -49,8 +49,11 @@ def Generate_Table(data_str):
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
-    image_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+    png = buffer.read()
+    # image_base64 = base64.b64encode(buffer.read()).decode('utf-8')
 
     # 關閉圖形
     plt.close()
-    return image_base64
+    # return image_base64
+    return png
+
