@@ -1,6 +1,6 @@
 import discord
 
-from mod.modal import add_data
+from mod.modal import add_data, get_data
 from mod.dms.dm_mongo import fetch_member
 # from mod.dms.dm_sqlite import get_added_members
 
@@ -53,7 +53,8 @@ class Preview(discord.ui.View):
 
     @discord.ui.button(label='提取代碼', style=discord.ButtonStyle.green, custom_id='2')
     async def gettoken(self, interaction:discord.Interaction, button:discord.ui.Button):
-        interaction.response.send_message("該檔案提取代碼為00000", ephemeral=True)
+        await interaction.response.send_modal(get_data())
+        # interaction.response.send_message("該檔案提取代碼為00000", ephemeral=True)
     
     @discord.ui.button(label="回上一頁",style=discord.ButtonStyle.green)
     async def back(self,interaction:discord.Interaction,button:discord.ui.Button):

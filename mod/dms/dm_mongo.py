@@ -32,5 +32,6 @@ def add_file(filename, data):
     
     with gridfs_db.new_file(filename=filename) as file:
         file.write(binary_data)
-        
+
+
     return "圖片已成功存入數據庫中。"

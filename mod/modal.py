@@ -16,6 +16,16 @@ class add_data(discord.ui.Modal,title="建立共享"):
         except:
             await interaction.response.send_message(f'ID 錯誤', ephemeral=True)
             
+
+class get_data(discord.ui.Modal,title="提取資料"):
+    add_member = discord.ui.TextInput(
+        label='共享代碼',
+        placeholder='Share_ID',
+    )
+    
+    async def on_submit(self,interaction: discord.Interaction):
+        await interaction.response.send_message(file=discord.File("temp_image.png"))
+            
 # class reaction_feedback(Modal):
 #     def __init__(self):
 #         super().__init__(title="反應回饋")

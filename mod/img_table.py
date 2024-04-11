@@ -7,7 +7,7 @@ from io import StringIO,BytesIO
 import base64
 
 def Generate_Table(data_str):
-    fontManager.addfont('TaipeiSansTCBeta-Regular.ttf')
+    fontManager.addfont('Discord_HBOT/TaipeiSansTCBeta-Regular.ttf')
     mpl.rc('font', family='Taipei Sans TC Beta')
     
     # 使用StringIO将字符串转换为文件对象
