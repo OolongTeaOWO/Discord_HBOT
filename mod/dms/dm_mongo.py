@@ -28,9 +28,11 @@ def fetch_member(memberID):
     return member_db.find_one({memberID: {"$exists": True}})
 
 def add_file(filename, data):
-    binary_data = base64.b64decode(data)
+    
+    if gridfs_db.exists({"filename": filename}):
+        raise "相同文件名已存在於數據庫中。"
     
     with gridfs_db.new_file(filename=filename) as file:
-        file.write(binary_data)
+        file.write(data)
         
     return "圖片已成功存入數據庫中。"

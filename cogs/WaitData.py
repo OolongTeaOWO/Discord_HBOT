@@ -20,9 +20,12 @@ class WaitData(commands.Cog):
             csv_data = await file.read()
             csv_string = csv_data.decode('utf-8')
             
-            base64_img = Generate_Table(csv_string)
-            add_file(str(interaction.user.id),base64_img)
-            await interaction.response.send_message("ok")
+            try:
+                png = Generate_Table(csv_string)
+                add_file(str(interaction.user.id),png)
+                await interaction.response.send_message("ok",ephemeral=True)
+            except:
+                await interaction.response.send_message("錯誤!",ephemeral=True)
         else:
             await interaction.response.send_message("格式錯誤", ephemeral=True)
 

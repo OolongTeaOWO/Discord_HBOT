@@ -49,8 +49,10 @@ def Generate_Table(data_str):
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
-    image_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+    png = buffer.read()
+    # image_base64 = base64.b64encode(buffer.read()).decode('utf-8')
 
     # 關閉圖形
     plt.close()
-    return image_base64
+    # return image_base64
+    return png
