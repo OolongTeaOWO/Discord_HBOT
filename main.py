@@ -1,10 +1,13 @@
 import discord
 from discord.ext import commands
-import os
+
 from dotenv import load_dotenv
 from mod.view import Index
 
 from typing import Optional
+import importlib.util
+import inspect
+import os
 
 load_dotenv()
 Token = os.getenv("TOKEN")
@@ -15,6 +18,14 @@ async def on_ready():
     game = discord.Game("花椰菜")
     await bot.change_presence(status=discord.Status.idle, activity=game)
     await load_all_extensions()
+    spec=importlib.util.spec_from_file_location("view", "mod/view.py")
+    view_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(view_module)
+    members = inspect.getmembers(view_module, inspect.isclass)
+    for name, class_ in members:
+        if class_.__module__ == view_module.__name__:
+            bot.add_view(class_())
+            print(f"{name} 類已添加到視圖中")
     print(f">>{bot.user}上線<<")
     game = discord.Game("機器人製作ing...")
     # bot.add_view(Index())

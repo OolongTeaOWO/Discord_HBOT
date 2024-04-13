@@ -15,15 +15,15 @@ class WaitData(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name = "upload_file", description = "上傳檔案")
-    async def GetData(self, interaction:discord.Interaction, file:discord.Attachment):
+    @app_commands.command(name = "upload_files", description = "上傳檔案")
+    async def getdata(self, interaction:discord.Interaction, code:int, file:discord.Attachment):
         if file.filename[-3:] == 'csv':
             csv_data = await file.read()
             csv_string = csv_data.decode('utf-8')
             
             try:
                 png = Generate_Table(csv_string)
-                add_file(str(interaction.user.id),png)
+                add_file(str(interaction.user.id), png, code)
                 await interaction.response.send_message("ok",ephemeral=True)
             except:
                 await interaction.response.send_message("錯誤!",ephemeral=True)
