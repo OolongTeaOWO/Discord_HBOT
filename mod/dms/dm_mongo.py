@@ -32,13 +32,6 @@ def fetch_member(memberNAME):
         if last_list:
             return last_list
 
-def add_file(filename, data, code):
-    binary_data = base64.b64decode(data)
-    
-    with gridfs_db.new_file(code=code,filename=filename) as file:
-        file.write(binary_data)
-    return "圖片已成功存入數據庫中。"
-
 def fetch_data(Code):
     data = gridfs_db.find_one({Code: {"$exists": True}})
     if data:
