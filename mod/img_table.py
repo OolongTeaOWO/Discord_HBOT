@@ -4,7 +4,6 @@ import matplotlib as mpl
 from matplotlib.font_manager import fontManager
 
 from io import StringIO,BytesIO
-import base64
 
 def Generate_Table(data_str):
     fontManager.addfont('TaipeiSansTCBeta-Regular.ttf')
