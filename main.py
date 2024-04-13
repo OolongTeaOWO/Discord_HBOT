@@ -2,9 +2,6 @@ import discord
 from discord.ext import commands
 import os
 from dotenv import load_dotenv
-from mod.view import Index
-
-from typing import Optional
 
 load_dotenv()
 Token = os.getenv("TOKEN")
