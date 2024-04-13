@@ -1,8 +1,6 @@
 from pymongo import MongoClient
 from gridfs import GridFS
 
-import base64
-
 client = MongoClient("mongodb://localhost:27017/")
 db = client["database"]
 member_db = db.members
@@ -28,8 +26,15 @@ def fetch_member(memberID):
     return member_db.find_one({memberID: {"$exists": True}})
 
 def add_file(filename, data):
-    binary_data = base64.b64decode(data)
-    
-    with gridfs_db.new_file(filename=filename) as file:
-        file.write(binary_data)
-    return "圖片已成功存入數據庫中。"
+    with GridFS(gridfs_db) as fs:
+        existing_file = fs.find_one(filename=filename)
+
+        if existing_file:
+            existing_file.update_one({"$set": {"data": data}})
+            message = "圖片已更新至數據庫中。"
+        else:
+            with fs.new_file(filename=filename) as file:
+                file.write(data)
+            message = "圖片已成功存入數據庫中。"
+
+    return message
