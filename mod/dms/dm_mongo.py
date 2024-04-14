@@ -40,15 +40,20 @@ def fetch_data(code):
         return "沒檔案"
     
 def add_file(filename, data):
-    with GridFS(gridfs_db) as fs:
-        existing_file = fs.find_one(filename=filename)
-
-        if existing_file:
-            existing_file.update_one({"$set": {"data": data}})
-            message = "圖片已更新至數據庫中。"
-        else:
-            with fs.new_file(filename=filename) as file:
-                file.write(data)
-            message = "圖片已成功存入數據庫中。"
+    existing_file = gridfs_db.find_one({'filename': filename})
+    
+    if existing_file:
+        gridfs_db.delete(existing_file._id)
+        
+        with gridfs_db.new_file(filename=filename) as file:
+            file.write(data)
+            file.close()
+        message = f'圖片 {filename} 已更新至數據庫中。'
+    else:
+        
+        with gridfs_db.new_file(filename=filename) as file:
+            file.write(data)
+            file.close()
+        message = f'圖片 {filename} 已成功存入數據庫中。'
 
     return message

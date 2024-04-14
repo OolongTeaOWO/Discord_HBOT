@@ -1,10 +1,7 @@
 import discord
 # slash command
 from discord import app_commands
-from typing import Optional
-
 from discord.ext import commands
-from discord.ui import Button, View
 
 from mod.view import Index
 
