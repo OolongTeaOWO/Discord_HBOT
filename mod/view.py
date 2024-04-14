@@ -1,6 +1,6 @@
 import discord
 
-from mod.modal import add_data, get_data, get_message
+from mod.modal import add_data, get_data
 from mod.dms.dm_mongo import fetch_member
 # from mod.dms.dm_sqlite import get_added_members
 
@@ -20,9 +20,11 @@ class Index(discord.ui.View):
         embed.set_footer(text="共享功能")
         await interaction.response.edit_message(view=Profile(),embed=embed)
             
-    @discord.ui.button(label='反應回饋',style=discord.ButtonStyle.danger,emoji='❗',custom_id="error_reaction")
+    @discord.ui.button(label='緊急呼叫',style=discord.ButtonStyle.danger,emoji='❗',custom_id="error_reaction")
     async def error_reaction(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_modal(get_message())
+        owner = interaction.guild.owner
+        await interaction.response.defer()
+        await owner.send("緊急呼叫")
 
 class Profile(discord.ui.View):
     def __init__(self):
@@ -73,3 +75,31 @@ class Preview(discord.ui.View):
         embed = interaction.message.embeds[0]
         embed.remove_footer()
         await interaction.response.edit_message(view=Index(),embed=embed)
+
+class OldpeopleUI(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    @discord.ui.button(label='心跳', style=discord.ButtonStyle.green, custom_id='heart')
+    async def heart(self, interaction:discord.Interaction, button:discord.ui.Button):
+        embed = interaction.message.embeds[0]
+        embed.description = "# 心跳正常"
+        await interaction.response.edit_message(embed=embed)
+    
+    @discord.ui.button(label="血氧",style=discord.ButtonStyle.green, custom_id="blood_air")
+    async def ox(self,interaction:discord.Interaction,button:discord.ui.Button):
+        embed = interaction.message.embeds[0]
+        embed.description = "# 血氧濃度正常"
+        await interaction.response.edit_message(embed=embed)
+
+    @discord.ui.button(label='步數', style=discord.ButtonStyle.green, custom_id='walk')
+    async def walk(self, interaction:discord.Interaction, button:discord.ui.Button):
+        embed = interaction.message.embeds[0]
+        embed.description = "# 近期步數不足, 運動量偏少, 請多加注意"
+        await interaction.response.edit_message(embed=embed)
+
+    @discord.ui.button(label="心律",style=discord.ButtonStyle.green, custom_id="heart_d")
+    async def heart_d(self,interaction:discord.Interaction,button:discord.ui.Button):
+        embed = interaction.message.embeds[0]
+        embed.description = "# 心律近期有異常 請注意"
+        await interaction.response.edit_message(embed=embed)

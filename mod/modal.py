@@ -31,18 +31,3 @@ class get_data(discord.ui.Modal,title="提取資料"):
         state = fetch_data(int(self.add_code.value))
         embed.set_footer(text=state)
         await interaction.response.edit_message(embed=embed)
-
-class get_message(discord.ui.Modal,title="反應回饋"):
-    add_text = discord.ui.TextInput(
-        label='回饋內容',
-        placeholder='你想說的內容輸入於此',
-    )
-    
-    async def on_submit(self,interaction: discord.Interaction):
-        owner = interaction.guild.owner
-        await owner.send(self.add_text.value)
-            
-# class reaction_feedback(Modal):
-#     def __init__(self):
-#         super().__init__(title="反應回饋")
-#         self.add_item(TextInput(label="你想說的~",style=discord.TextInput.placeholder))
