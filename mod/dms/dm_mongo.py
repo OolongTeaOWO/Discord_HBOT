@@ -32,12 +32,13 @@ def fetch_member(memberNAME):
         if last_list:
             return last_list
 
-def fetch_data(Code):
-    data = gridfs_db.find_one({Code: {"$exists": True}})
+def fetch_data(code):
+    data = gridfs_db.find_one({code: {"$exists": True}})
     if data:
         return "有檔案"
     else:
         return "沒檔案"
+    
 def add_file(filename, data):
     with GridFS(gridfs_db) as fs:
         existing_file = fs.find_one(filename=filename)

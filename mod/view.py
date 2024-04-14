@@ -14,10 +14,10 @@ class Index(discord.ui.View):
         embed.set_footer(text="資料共享")
         await interaction.response.edit_message(view=Preview(),embed=embed)
     
-    @discord.ui.button(label="個人健康資料",style=discord.ButtonStyle.green, custom_id="own_data")
+    @discord.ui.button(label="共享功能",style=discord.ButtonStyle.green, custom_id="own_data")
     async def call_share(self,interaction:discord.Interaction,button:discord.ui.Button):
         embed = interaction.message.embeds[0]
-        embed.set_footer(text="個人健康資料")
+        embed.set_footer(text="共享功能")
         await interaction.response.edit_message(view=Profile(),embed=embed)
             
     @discord.ui.button(label='反應回饋',style=discord.ButtonStyle.danger,emoji='❗',custom_id="error_reaction")
