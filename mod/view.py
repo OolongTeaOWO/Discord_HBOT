@@ -1,8 +1,7 @@
 import discord
 
-from mod.modal import add_data, get_data
+from mod.modal import add_data
 from mod.dms.dm_mongo import fetch_member
-# from mod.dms.dm_sqlite import get_added_members
 
 class Index(discord.ui.View):
     def __init__(self):
@@ -32,17 +31,19 @@ class Profile(discord.ui.View):
     
     @discord.ui.button(label='共享列表',style=discord.ButtonStyle.green,custom_id="share_list")
     async def fetch_list(self, interaction: discord.Interaction, button: discord.ui.Button):
-        response = fetch_member(str(interaction.user.display_name))
+        response = fetch_member(str(interaction.user.id))
         embed = interaction.message.embeds[0]
         text = ""
         if response == None:
             embed.set_footer(text="沒有資料")
         for item in response:
-            text += item + "\n"
+            user = await interaction.client.fetch_user(item)
+            text += str(user.name) + "\n"
         if embed.fields:
             embed.set_field_at(index=0, name="共享列表", value=text)
         else:
             embed.insert_field_at(index=0, name="共享列表", value=text)
+        embed.set_footer(text='共享列表')
         await interaction.response.edit_message(view=Profile(),embed=embed)
     
     @discord.ui.button(label='建立共享',style=discord.ButtonStyle.green,custom_id="set_share")
@@ -51,7 +52,7 @@ class Profile(discord.ui.View):
     
     @discord.ui.button(label='提取資料',style=discord.ButtonStyle.green,custom_id="get_data")
     async def get_data(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_modal(get_data())
+        await interaction.response.edit_message(view=Data_Options())
         
     @discord.ui.button(label="回上一頁",style=discord.ButtonStyle.green, custom_id="back")
     async def back(self,interaction:discord.Interaction,button:discord.ui.Button):
@@ -103,3 +104,18 @@ class OldpeopleUI(discord.ui.View):
         embed = interaction.message.embeds[0]
         embed.description = "# 心律近期有異常 請注意"
         await interaction.response.edit_message(embed=embed)
+
+class Data_Options(discord.ui.View):
+    def __init__(self):
+        super().__init__()
+    
+    # @discord.ui.select()
+    # async def member_list(self,interaction:discord.Interaction,select:discord.ui.Select):
+    #     pass
+    
+    @discord.ui.button(label="回上一頁",style=discord.ButtonStyle.green, custom_id="backs")
+    async def back(self,interaction:discord.Interaction,button:discord.ui.Button):
+        embed = interaction.message.embeds[0]
+        if embed.fields:
+            embed.remove_field(index=0)
+        await interaction.response.edit_message(view=Profile(),embed=embed)

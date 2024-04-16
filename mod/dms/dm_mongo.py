@@ -8,9 +8,11 @@ member_db = db.members
 gridfs_db = GridFS(client["gridfs_database"])
 
 def add_member(memberID, addID, return_type: int):
-    if memberID == str(addID):
+    print(type(memberID))
+    print(type(addID))
+    if memberID == addID:
         raise "ID 重複"
-    memberNAME = str(memberID)
+    memberID = str(memberID)
     existing_doc = member_db.find_one({memberID: {"$exists": True}})
     
     if existing_doc:
@@ -22,8 +24,8 @@ def add_member(memberID, addID, return_type: int):
         2: "完成"
     }.get(return_type, "未知類型")
 
-def fetch_member(memberNAME):
-    data = member_db.find_one({memberNAME: {"$exists": True}})
+def fetch_member(memberID):
+    data = member_db.find_one({memberID: {"$exists": True}})
     if data:
         last_list = None
         for key, value in data.items():
