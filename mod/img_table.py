@@ -1,58 +1,72 @@
-import pandas as pd
+from matplotlib.font_manager import fontManager
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from matplotlib.font_manager import fontManager
+import pandas as pd
 
 from io import StringIO,BytesIO
 
 def Generate_Table(data_str):
+
     fontManager.addfont('TaipeiSansTCBeta-Regular.ttf')
     mpl.rc('font', family='Taipei Sans TC Beta')
-    
-    # 使用StringIO将字符串转换为文件对象
+    colors = ['text.color', 'axes.labelcolor', 'xtick.color', 'ytick.color', 'axes.edgecolor']
+
+    for set in colors:
+        plt.rcParams[set] = 'white'
+
     data_file = StringIO(data_str)
+    
+    df = pd.read_csv(data_file)
+    plt.figure(facecolor="#1e2124", figsize=(12,7))
+    x = list(range(1,25))
 
-    # 读取csv文件并将其转换为DataFrame
-    data = pd.read_csv(data_file)
-    # 将日期的年份去除，只保留月份和日期
-    data["日期"] = pd.to_datetime(data["日期"]).dt.strftime('%m-%d')
-
-    plt.figure(figsize=(15, 6)) # 設定圖形大小和背景顏色為深灰色
-
-    # 第一張圖：卡路里
+    # 步數子圖
     plt.subplot(2, 2, 1)
-    plt.plot(data["日期"], data["卡路里 (大卡)"], label="卡路里")
-    plt.legend()
-    plt.title("卡路里")
+    plt.title("步數")
+    step_num = df['步數']/100
+    plt.plot(x, step_num, 'r')  # red line without marker
+    plt.yticks(range(20, 110, 20))  # 手動設置 y 軸範圍
+    plt.gca().set_facecolor('#1e2124')
+    plt.xlabel('每小時')
+    plt.ylabel('每100步')
 
-    # 第二張圖：距離
+    # 平均心律子圖
     plt.subplot(2, 2, 2)
-    plt.plot(data["日期"], data["距離 (公尺)"], label="距離")
-    plt.legend()
-    plt.title("距離")
+    plt.title("平均心律")
+    ahr = df['平均心律']
+    plt.plot(x, ahr, 'r')  # red line without marker
+    plt.yticks(range(60, 110, 10))  # 手動設置 y 軸範圍
+    plt.gca().set_facecolor('#1e2124')
+    plt.xlabel('每小時')
+    plt.ylabel('心跳平均值')
 
-    # 第三張圖：平均心率
+
+    # 心跳子圖
     plt.subplot(2, 2, 3)
-    plt.plot(data["日期"], data["平均心率 (每分鐘心跳數)"], label="平均心率")
-    plt.legend()
-    plt.title("平均心率")
+    plt.title("心跳")
+    heart_bit = df['心跳']
+    plt.plot(x, heart_bit, 'r')  # red line without marker
+    plt.yticks(range(60, 130, 10))  # 手動設置 y 軸範圍
+    plt.gca().set_facecolor('#1e2124')
+    plt.xlabel('每小時')
+    plt.ylabel('每分鐘心跳次數')
 
-    # 第四張圖：平均速度
+    # 血氧濃度子圖
     plt.subplot(2, 2, 4)
-    plt.plot(data["日期"], data["平均速度 (公尺/秒)"], label="平均速度")
-    plt.legend()
-    plt.title("平均速度")
+    plt.title("血氧濃度")
+    spox = df['血氧濃度']
+    plt.plot(x, spox, 'r')  # red line without marker
+    plt.yticks(range(90, 101, 2))  # 手動設置 y 軸範圍
+    plt.gca().set_facecolor('#1e2124')
+    plt.xlabel('每小時')
+    plt.ylabel('百分比')
 
-    plt.tight_layout() # 自動調整子圖間的間距
+    plt.tight_layout()
 
+    # 儲存圖片
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     png = buffer.read()
-    # image_base64 = base64.b64encode(buffer.read()).decode('utf-8')
-
-    # 關閉圖形
     plt.close()
-    # return image_base64
     return png
-
