@@ -27,6 +27,7 @@ class WaitData(commands.Cog):
             try:
                 png = Generate_Table(csv_string)
                 add_file(str(interaction.user.id),png)
+
                 await interaction.response.send_message("ok",ephemeral=True)
             except:
                 await interaction.response.send_message("錯誤!",ephemeral=True)
