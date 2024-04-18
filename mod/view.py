@@ -1,30 +1,22 @@
 import discord
 
 from mod.modal import add_data,show_member_in_list
-from mod.dms.dm_mongo import fetch_member
+from mod.dms.dm_mongo import fetch_member, fetch_data
 
 class Index(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="資料共享",style=discord.ButtonStyle.green, custom_id="data_share")
+    @discord.ui.button(label="個人健康數據",style=discord.ButtonStyle.green, custom_id="data_share")
     async def call_preview(self,interaction:discord.Interaction,button:discord.ui.Button):
-        embed = interaction.message.embeds[0]
-        embed.set_footer(text="資料共享")
-        await interaction.response.edit_message(view=Preview(),embed=embed)
+        data = fetch_data(str(interaction.user.id))
+        await interaction.response.send_message(file=discord.File(data,filename="ewe.png"),ephemeral=True)
     
     @discord.ui.button(label="共享功能",style=discord.ButtonStyle.green, custom_id="own_data")
     async def call_share(self,interaction:discord.Interaction,button:discord.ui.Button):
         embed = interaction.message.embeds[0]
         embed.set_footer(text="共享功能")
         await interaction.response.edit_message(view=Profile(),embed=embed)
-            
-    @discord.ui.button(label='緊急呼叫',style=discord.ButtonStyle.danger,emoji='❗',custom_id="error_reaction")
-    async def error_reaction(self, interaction: discord.Interaction, button: discord.ui.Button):
-        owner = interaction.guild.owner
-        await interaction.response.defer()
-        await owner.send("緊急呼叫")
-
 class Profile(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
@@ -74,22 +66,6 @@ class Profile(discord.ui.View):
         if embed.fields:
             embed.remove_field(index=0)
         await interaction.response.edit_message(view=Index(),embed=embed)
-
-#喔耶
-class Preview(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=None)
-
-    @discord.ui.button(label='提取代碼', style=discord.ButtonStyle.green, custom_id='get_code')
-    async def gettoken(self, interaction:discord.Interaction, button:discord.ui.Button):
-        interaction.response.send_message("該檔案提取代碼為00000", ephemeral=True)
-    
-    @discord.ui.button(label="回上一頁",style=discord.ButtonStyle.green, custom_id="backs")
-    async def back(self,interaction:discord.Interaction,button:discord.ui.Button):
-        embed = interaction.message.embeds[0]
-        embed.remove_footer()
-        await interaction.response.edit_message(view=Index(),embed=embed)
-
 class OldpeopleUI(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
@@ -112,11 +88,10 @@ class OldpeopleUI(discord.ui.View):
         embed.description = "# 近期步數不足, 運動量偏少, 請多加注意"
         await interaction.response.edit_message(embed=embed)
 
-    @discord.ui.button(label="心律",style=discord.ButtonStyle.green, custom_id="heart_d")
-    async def heart_d(self,interaction:discord.Interaction,button:discord.ui.Button):
-        embed = interaction.message.embeds[0]
-        embed.description = "# 心律近期有異常 請注意"
-        await interaction.response.edit_message(embed=embed)
+    @discord.ui.button(label='緊急呼叫',style=discord.ButtonStyle.danger,emoji='❗',custom_id="error_reaction")
+    async def error_reaction(self, interaction: discord.Interaction, button: discord.ui.Button):
+        guild_name = interaction.message.guild
+        print(guild_name)
 
 class Data_Options(discord.ui.View):
     def __init__(self):
