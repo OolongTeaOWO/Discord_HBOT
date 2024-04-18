@@ -38,23 +38,23 @@ def Generate_Table(data_str):
     plt.yticks(range(60, 110, 10))  # 手動設置 y 軸範圍
     plt.gca().set_facecolor('#1e2124')
     plt.xlabel('每小時')
-    plt.ylabel('心跳平均值')
+    plt.ylabel('心律平均值')
 
 
     # 心跳子圖
     plt.subplot(2, 2, 3)
-    plt.title("心跳")
-    heart_bit = df['心跳']
+    plt.title("活動心律")
+    heart_bit = df['活動心律']
     plt.plot(x, heart_bit, 'r')  # red line without marker
     plt.yticks(range(60, 130, 10))  # 手動設置 y 軸範圍
     plt.gca().set_facecolor('#1e2124')
     plt.xlabel('每小時')
-    plt.ylabel('每分鐘心跳次數')
+    plt.ylabel('每分鐘心律')
 
     # 血氧濃度子圖
     plt.subplot(2, 2, 4)
     plt.title("血氧濃度")
-    spox = df['血氧濃度']
+    spox = df['血氧']
     plt.plot(x, spox, 'r')  # red line without marker
     plt.yticks(range(90, 101, 2))  # 手動設置 y 軸範圍
     plt.gca().set_facecolor('#1e2124')
