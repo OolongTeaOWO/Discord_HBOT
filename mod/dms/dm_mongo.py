@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from gridfs import GridFS
+from io import BytesIO
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["database"]
@@ -34,13 +35,13 @@ def fetch_member(memberID):
         if last_list:
             return last_list
 
-def fetch_data(code):
-    data = gridfs_db.find_one({code: {"$exists": True}})
-    if data:
-        return "有檔案"
+def fetch_data(memberID):
+    file_data = gridfs_db.find_one({'filename': memberID})
+    if file_data:
+        return BytesIO(file_data.read())
     else:
-        return "沒檔案"
-    
+        return None
+
 def add_file(filename, data):
     existing_file = gridfs_db.find_one({'filename': filename})
     
@@ -48,7 +49,8 @@ def add_file(filename, data):
         gridfs_db.delete(existing_file._id)
         
         with gridfs_db.new_file(filename=filename) as file:
-            file.write(data)
+            utf8_data = data.encode('utf-8')
+            file.write(utf8_data)
             file.close()
         message = f'圖片 {filename} 已更新至數據庫中。'
     else:

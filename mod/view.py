@@ -1,7 +1,7 @@
 import discord
 
 from mod.modal import add_data
-from mod.dms.dm_mongo import fetch_member
+from mod.dms.dm_mongo import fetch_member,fetch_data
 
 class Index(discord.ui.View):
     def __init__(self):
@@ -112,6 +112,10 @@ class Data_Options(discord.ui.View):
     # @discord.ui.select()
     # async def member_list(self,interaction:discord.Interaction,select:discord.ui.Select):
     #     pass
+    @discord.ui.button(label="ok",style=discord.ButtonStyle.green, custom_id="oks")
+    async def oks(self,interaction:discord.Interaction,button:discord.ui.Button):
+        data = fetch_data(str(interaction.user.id))
+        await interaction.response.send_message(file=discord.File(data,filename="ewe.png"))
     
     @discord.ui.button(label="回上一頁",style=discord.ButtonStyle.green, custom_id="backs")
     async def back(self,interaction:discord.Interaction,button:discord.ui.Button):

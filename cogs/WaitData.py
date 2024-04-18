@@ -9,8 +9,6 @@ from mod.img_table import Generate_Table
 
 from mod.dms.dm_mongo import add_file
 
-import asyncio
-
 class WaitData(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -29,9 +27,6 @@ class WaitData(commands.Cog):
             try:
                 png = Generate_Table(csv_string)
                 add_file(str(interaction.user.id),png)
-                # await interaction.response.defer(thinking=True)
-                # asyncio.sleep(4)
-                # await interaction.followup.send("ok",ephemeral=True)
                 await interaction.response.send_message("ok",ephemeral=True)
             except:
                 await interaction.response.send_message("錯誤!",ephemeral=True)
